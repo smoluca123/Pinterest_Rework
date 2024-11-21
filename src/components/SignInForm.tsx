@@ -56,7 +56,7 @@ export default function SignInForm() {
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(handleSignIn)}>
         {/* Error message */}
-        {error.message && <Alert variant="destructive">{error.message}</Alert>}
+        {error.message && <Alert variant="error">{error.message}</Alert>}
 
         <FormField
           control={form.control}
@@ -90,6 +90,14 @@ export default function SignInForm() {
           Đăng nhập
         </Button>
       </form>
+      <p
+        className="mx-auto font-medium cursor-pointer hover:underline w-fit"
+        onClick={() => {
+          dispatch(setAuthDialogOpen({ isOpen: true, dialogType: 'signup' }));
+        }}
+      >
+        Chưa tham gia Pinterest? Đăng ký
+      </p>
     </Form>
   );
 }

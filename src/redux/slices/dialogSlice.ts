@@ -5,7 +5,7 @@ type DialogItemType = {
   isOpen: boolean;
 };
 
-export type AuthDialogTypeString = 'signin' | 'signup';
+export type AuthDialogTypeString = 'signin' | 'signup' | 'verify-email';
 
 interface DialogState {
   authDialog: DialogItemType & {

@@ -33,3 +33,43 @@ export const signUpAPI = async (credentials: SignUpValues) => {
     throw error.message;
   }
 };
+
+export const sendActiveCodeToEmailAPI = async (userId: number) => {
+  try {
+    const { data } = await baseApi.post<ApiResponseWrapper<null>>(
+      '/auth/send-activation-mail',
+      {
+        userId,
+      }
+    );
+    return data;
+  } catch (error: any) {
+    if (error.response) {
+      throw error.response.data.message;
+    }
+    throw error.message;
+  }
+};
+
+export const verifyEmailAPI = async ({
+  userId,
+  code,
+}: {
+  userId: number;
+  code: string;
+}) => {
+  try {
+    const { data } = await baseApi.post<
+      ApiResponseWrapper<UserDataWithTokenType>
+    >('/auth/activation-by-code', {
+      userId,
+      code,
+    });
+    return data;
+  } catch (error: any) {
+    if (error.response) {
+      throw error.response.data.message;
+    }
+    throw error.message;
+  }
+};
