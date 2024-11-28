@@ -27,7 +27,7 @@ export default function Header() {
   };
 
   return (
-    <div className="sticky top-0 z-10 p-4">
+    <div className="sticky top-0 z-10 py-4 bg-background">
       <div className="flex items-center justify-between gap-4">
         {/* Search Box */}
         <SearchBox />

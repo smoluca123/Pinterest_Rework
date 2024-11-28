@@ -30,6 +30,7 @@ const dialogSlice = createSlice({
         };
       }
     ) => ({
+      ...state,
       authDialog: {
         ...state.authDialog,
         isOpen: action?.payload.isOpen || !state.authDialog.isOpen,

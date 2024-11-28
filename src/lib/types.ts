@@ -9,6 +9,18 @@ export interface ApiResponseWrapper<T> {
   date: string;
 }
 
+export interface ApiResponsePaginationWrapper<T> {
+  statusCode: number;
+  message: string;
+  data: {
+    currentPage: number;
+    totalPage: number;
+    totalItems: number;
+    items: T;
+  };
+  date: string;
+}
+
 export interface UserDataType {
   id: number;
   username: string;
@@ -30,4 +42,36 @@ export interface UserDataWithTokenType extends UserDataType {
 interface UserType {
   id: number;
   type_name: string;
+}
+
+export interface PinDataType {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+  type: string;
+  user: UserDataType;
+  image: ImageDataType[];
+}
+
+export interface ImageDataType {
+  id: number;
+  img_name: string;
+  url: string;
+  created_at: string;
+}
+
+export interface CommentDataType {
+  id: number;
+  content: string;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+  level: number;
+  reply_to: null;
+  media_id: number;
+  replies: number;
+  user: UserDataType;
 }
