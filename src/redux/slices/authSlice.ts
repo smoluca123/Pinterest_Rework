@@ -41,6 +41,20 @@ export const signIn = createAsyncThunk(
   }
 );
 
+const logOutReducer = (state: AuthState) => {
+  localStorage.removeItem('isAuthenticated');
+  localStorage.removeItem('currentUser');
+  return {
+    ...state,
+    isAuthenticated: false,
+    user: null,
+    isLoading: false,
+    error: {
+      message: null,
+    },
+  };
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -49,23 +63,17 @@ const authSlice = createSlice({
       state,
       { payload }: { payload: UserDataWithTokenType | null }
     ) => {
-      localStorage.setItem('currentUser', JSON.stringify(payload));
-      return { ...state, user: payload };
+      if (!payload) {
+        return logOutReducer(state);
+      }
+
+      const updatedUser = { ...state.user, ...payload };
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      return { ...state, user: updatedUser };
     },
-    logOut: (state) => {
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('currentUser');
-      return {
-        ...state,
-        isAuthenticated: false,
-        user: null,
-        isLoading: false,
-        error: {
-          message: null,
-        },
-      };
-    },
+    logOut: logOutReducer,
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(signIn.pending, (state) => ({

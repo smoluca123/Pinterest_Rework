@@ -1,3 +1,9 @@
+import { Pins } from '@/modules/home/components/Pin';
+
 export default function Home() {
-  return <div>Home</div>;
+  return (
+    <div>
+      <Pins />
+    </div>
+  );
 }
