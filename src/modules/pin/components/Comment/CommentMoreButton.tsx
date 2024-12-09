@@ -7,6 +7,7 @@ import {
 import { CommentDataType } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import DeleteCommentDialog from '@/modules/pin/components/Comment/DeleteCommentDialog';
+import EditCommentDialog from '@/modules/pin/components/Comment/EditCommentDialog';
 import { Ellipsis } from 'lucide-react';
 import { useState } from 'react';
 
@@ -17,6 +18,7 @@ interface IProps {
 
 export default function CommentMoreButton({ comment, className }: IProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
   return (
     <>
       <DropdownMenu>
@@ -25,7 +27,12 @@ export default function CommentMoreButton({ comment, className }: IProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-white border-border/20">
           <DropdownMenuItem className="hover:!bg-gray-200">
-            <button className="w-full text-black">Chỉnh sửa</button>
+            <button
+              className="w-full text-black"
+              onClick={() => setShowEditDialog(true)}
+            >
+              Chỉnh sửa
+            </button>
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:!bg-gray-200">
             <button
@@ -41,6 +48,11 @@ export default function CommentMoreButton({ comment, className }: IProps) {
         open={showDeleteDialog}
         commentData={comment}
         onClose={() => setShowDeleteDialog(false)}
+      />
+      <EditCommentDialog
+        open={showEditDialog}
+        commentData={comment}
+        onClose={() => setShowEditDialog(false)}
       />
     </>
   );

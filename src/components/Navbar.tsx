@@ -15,7 +15,7 @@ const navList = [
   },
   {
     label: 'Tạo',
-    to: '/',
+    to: '/pin-create',
     Icon: PlusSquare,
   },
   {
@@ -27,7 +27,7 @@ const navList = [
 
 export default function Navbar() {
   return (
-    <div className="md:space-y-6 flex justify-center items-center md:block">
+    <div className="flex items-center justify-center md:space-y-6 md:block">
       {navList.map(({ label, to, Icon }) => (
         <Link to={to} key={Math.random()} className="block ">
           <TooltipProvider>

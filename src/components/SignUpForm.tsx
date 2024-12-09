@@ -31,7 +31,11 @@ const steps = [
   },
 ];
 
-export default function SignUpForm() {
+export default function SignUpForm({
+  isShowStep = true,
+}: {
+  isShowStep?: boolean;
+}) {
   const [activeStep, setActiveStep] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +80,7 @@ export default function SignUpForm() {
       setActiveStep(2);
 
       // open verify email dialog
-      dispatch(setAuthDialogOpen({ isOpen: true, dialogType: 'verify-email' }));
+      dispatch(setAuthDialogOpen({ dialogType: 'verify-email' }));
 
       // close dialog
       // dispatch(setAuthDialogOpen({ isOpen: false }));
@@ -90,7 +94,7 @@ export default function SignUpForm() {
 
   return (
     <>
-      <Steps steps={steps} activeStep={activeStep} />
+      {isShowStep && <Steps steps={steps} activeStep={activeStep} />}
       {/* Step 1 */}
       {dialogType === 'signup' && (
         <Form {...form}>
@@ -167,16 +171,6 @@ export default function SignUpForm() {
               Đăng ký
             </Button>
           </form>
-          <p
-            className="mx-auto font-medium cursor-pointer hover:underline w-fit"
-            onClick={() => {
-              dispatch(
-                setAuthDialogOpen({ isOpen: true, dialogType: 'signin' })
-              );
-            }}
-          >
-            Đã tham gia Pinterest? Đăng nhập
-          </p>
         </Form>
       )}
 

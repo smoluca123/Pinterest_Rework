@@ -1,7 +1,7 @@
-import { PinDataType } from '@/lib/types';
-import { getPrefetchQueryPinDetailOptions } from '@/modules/pin/components/PinDetail/querys';
-import { useQueryClient } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { PinDataType } from "@/lib/types";
+import { getPrefetchQueryPinDetailOptions } from "@/modules/pin/components/PinDetail/querys";
+import { useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 
 export default function PinItem({
   pinData,
@@ -13,7 +13,6 @@ export default function PinItem({
   const prefetchPinDetailOptions = getPrefetchQueryPinDetailOptions({
     pinId: pinData.id,
   });
-
   return (
     <Link
       to={`/pin/${pinData.id}/${encodeURIComponent(pinData.slug)}`}

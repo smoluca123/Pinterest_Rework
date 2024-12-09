@@ -44,6 +44,7 @@ export default function SignInForm() {
       // close dialog
       dispatch(
         setAuthDialogOpen({
+          dialogType: 'signin',
           isOpen: false,
         })
       );
@@ -90,14 +91,6 @@ export default function SignInForm() {
           Đăng nhập
         </Button>
       </form>
-      <p
-        className="mx-auto font-medium cursor-pointer hover:underline w-fit"
-        onClick={() => {
-          dispatch(setAuthDialogOpen({ isOpen: true, dialogType: 'signup' }));
-        }}
-      >
-        Chưa tham gia Pinterest? Đăng ký
-      </p>
     </Form>
   );
 }

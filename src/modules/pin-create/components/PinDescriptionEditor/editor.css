@@ -1,0 +1,7 @@
+.destiptap .tiptap p.is-editor-empty:first-child::before {
+  @apply text-muted-foreground;
+}
+
+.destiptap .tiptap {
+  @apply w-full grid items-center;
+}

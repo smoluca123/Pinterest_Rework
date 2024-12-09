@@ -9,22 +9,21 @@ import {
   setAuthDialogOpen,
 } from '@/redux/slices/dialogSlice';
 import { LogIn, UserPlus } from 'lucide-react';
+import { useCallback } from 'react';
 
 export default function Header() {
   const { theme } = useTheme();
   const { isAuthenticated } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
 
-  const handleOpenAuthDialog = (
-    dialogType: AuthDialogTypeString = 'signin'
-  ) => {
+  const handleOpenAuthDialog = useCallback((dialogType: AuthDialogTypeString = 'signin') => {
     dispatch(
       setAuthDialogOpen({
         isOpen: true,
         dialogType,
       })
     );
-  };
+  }, [dispatch]);
 
   return (
     <div className="sticky top-0 z-10 py-4 bg-background">
