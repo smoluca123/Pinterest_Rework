@@ -15,6 +15,30 @@ export const signUpSchema = z.object({
   password: requiredString,
 });
 
+export const profileUpdateSchema = z.object({
+  username: requiredString,
+  email: requiredString.email(),
+  fullName: requiredString,
+  age: z.coerce.number().int(),
+  password: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        return val.length >= 6;
+      },
+      { message: "Mật khẩu phải có ít nhất 6 ký tự" },
+    )
+    .refine(
+      (val) => {
+        if (!val) return true;
+        return /[!@#$%^&*(),.?":{}|<>]/.test(val);
+      },
+      { message: "Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt" },
+    ),
+});
+
 export const pinCreateSchema = z.object({
   name: requiredString,
   slug: requiredString,
@@ -43,3 +67,4 @@ export type PinUpdateValues = z.infer<typeof pinUpdateSchema>;
 export type PinCreateValues = z.infer<typeof pinCreateSchema>;
 export type SignInValues = z.infer<typeof signInSchema>;
 export type SignUpValues = z.infer<typeof signUpSchema>;
+export type ProfileUpdateValues = z.infer<typeof profileUpdateSchema>;

@@ -3,10 +3,12 @@ import { getMeAPI, getUserProfileAPI } from "@/apis/userApis";
 import { DEFAULT_STALE_TIME } from "@/lib/constant";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-export function useQueryProfileData({ userId }: { userId: number }) {
+export function useQueryUserProfile({ userId }: { userId: string }) {
   const fetchProfileData = async () => {
     try {
-      const { data } = await getUserProfileAPI(userId);
+      const { data } = await getUserProfileAPI({
+        userId,
+      });
       return data;
     } catch (error) {
       console.log(error);

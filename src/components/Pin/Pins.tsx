@@ -20,7 +20,6 @@ export default function Pins({
   >;
 }) {
   const { data, isFetching, fetchNextPage, hasNextPage } = infinitePinsData;
-  console.log(data);
   return (
     <InfiniteScrollContainer
       isShowInViewElement={hasNextPage}

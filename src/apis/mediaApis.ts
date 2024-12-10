@@ -220,9 +220,9 @@ export const getCreatedPinsAPI = async ({
 
 export const toggleSavePinAPI = async ({ pinId }: { pinId: number }) => {
   try {
-    const { data } = await baseApi.post<ApiResponseWrapper<PinDataType | null>>(
-      "/media/save-media/" + pinId,
-    );
+    const { data } = await baseApi.post<
+      ApiResponseWrapper<SavedPinDataType | null>
+    >("/media/save-media/" + pinId);
     return data;
   } catch (error: any) {
     if (error.response) {

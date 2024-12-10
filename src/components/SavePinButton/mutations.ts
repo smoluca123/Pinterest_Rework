@@ -1,10 +1,10 @@
-import { toggleSavePinAPI } from '@/apis/mediaApis';
-import { PinDataType } from '@/lib/types';
+import { toggleSavePinAPI } from "@/apis/mediaApis";
+import { PinDataType } from "@/lib/types";
 import {
   QueryFilters,
   useMutation,
   useQueryClient,
-} from '@tanstack/react-query';
+} from "@tanstack/react-query";
 
 export function useToggleSavePinMutation({
   pinData,
@@ -25,16 +25,16 @@ export function useToggleSavePinMutation({
 
   const mutation = useMutation({
     mutationKey: [
-      'save-pin',
+      "save-pin",
       {
         id: pinData.id,
       },
     ],
     mutationFn: handleToggleSavePin,
-    onSuccess: async (isSaved) => {
+    onSuccess: async (savedPin) => {
       const queryFilters: QueryFilters = {
         queryKey: [
-          'check-saved-pin',
+          "check-saved-pin",
           {
             id: pinData.id,
           },
@@ -44,8 +44,40 @@ export function useToggleSavePinMutation({
       await queryClient.cancelQueries(queryFilters);
 
       queryClient.setQueriesData<boolean>(queryFilters, () => {
-        return !!isSaved;
+        return !!savedPin;
       });
+
+      queryClient.refetchQueries({ queryKey: ["pins", "saved"] });
+
+      //
+      // queryClient.setQueriesData<
+      //   InfiniteData<ApiResponsePaginationWrapper<PinDataType[]>>
+      // >(
+      //   {
+      //     queryKey: ["pins", "saved"],
+      //   },
+      //   (oldData) => {
+      //     if (!oldData) return;
+      //     const pageSize = oldData.pages.length - 1 || 0;
+      //     const lastPage = oldData.pages[pageSize];
+      //     if (savedPin && lastPage) {
+      //       console.log(123);
+      //       return {
+      //         pageParams: oldData.pageParams,
+      //         pages: [
+      //           ...oldData.pages.slice(0, -1),
+      //           {
+      //             ...lastPage,
+      //             data: {
+      //               ...lastPage.data,
+      //               items: [...lastPage.data.items, savedPin.media],
+      //             },
+      //           },
+      //         ],
+      //       };
+      //     }
+      //   },
+      // );
     },
   });
   return mutation;

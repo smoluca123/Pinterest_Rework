@@ -30,7 +30,7 @@ export default function AppRoute() {
             <Route path="signup" element={<SignUpPage />} />
           </Route>
           <Route path="/profile" element={<MePage />} />
-          <Route path="/profile/:username" element={<ProfilePage />} />
+          <Route path="/profile/:username/:userId" element={<ProfilePage />} />
         </Route>
       </Routes>
     </BrowserRouter>

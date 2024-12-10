@@ -20,6 +20,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectAuth } from "@/redux/slices/authSlice";
 import xss from "xss";
 import PinsList from "@/modules/home/components/PinsList";
+import UsernameLink from "@/components/UsernameLink";
 
 const handleDownloadImage = async (image: ImageDataType) => {
   const { data } = await axios.get(image.url, {
@@ -122,7 +123,10 @@ function BackButton() {
 function Author({ userData }: { userData: UserDataType }) {
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
+      <UsernameLink
+        userData={userData}
+        className="flex items-center gap-2 text-black"
+      >
         <UserAvatar
           username={userData.username}
           userAvatarUrl={userData.avatar}
@@ -131,7 +135,7 @@ function Author({ userData }: { userData: UserDataType }) {
           <h3 className="text-sm font-medium">{userData.full_name}</h3>
           <p className="text-xs font-normal">@{userData.username}</p>
         </div>
-      </div>
+      </UsernameLink>
       <Button>Theo dõi</Button>
     </div>
   );

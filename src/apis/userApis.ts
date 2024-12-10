@@ -1,6 +1,14 @@
 import { baseApi } from "@/apis/baseApi";
-import { ApiResponseWrapper, UserDataWithTokenType } from "@/lib/types";
-import { SignInValues, SignUpValues } from "@/lib/validations";
+import {
+  ApiResponseWrapper,
+  UserDataType,
+  UserDataWithTokenType,
+} from "@/lib/types";
+import {
+  ProfileUpdateValues,
+  SignInValues,
+  SignUpValues,
+} from "@/lib/validations";
 
 export const signInAPI = async (credentials: SignInValues) => {
   try {
@@ -77,9 +85,7 @@ export const verifyEmailAPI = async ({
 export const getMeAPI = async () => {
   try {
     const { data } =
-      await baseApi.get<ApiResponseWrapper<UserDataWithTokenType>>(
-        "/user/infomation",
-      );
+      await baseApi.get<ApiResponseWrapper<UserDataType>>("/user/infomation");
 
     return data;
   } catch (error: any) {
@@ -90,11 +96,29 @@ export const getMeAPI = async () => {
   }
 };
 
-export const getUserProfileAPI = async (userId: number) => {
+export const getUserProfileAPI = async ({ userId }: { userId: string }) => {
   try {
     const { data } = await baseApi.get<
       ApiResponseWrapper<UserDataWithTokenType>
-    >("/user/infomation" + userId);
+    >("/user/infomation/" + userId);
+    return data;
+  } catch (error: any) {
+    if (error.response) {
+      throw error.response.data.message;
+    }
+    throw error.message;
+  }
+};
+
+export const updateProfileAPI = async ({
+  newData,
+}: {
+  newData: ProfileUpdateValues;
+}) => {
+  try {
+    const { data } = await baseApi.put<
+      ApiResponseWrapper<UserDataWithTokenType>
+    >("/user/update-info", newData);
     return data;
   } catch (error: any) {
     if (error.response) {

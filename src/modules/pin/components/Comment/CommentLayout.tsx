@@ -1,4 +1,5 @@
 import UserAvatar from "@/components/UserAvatar";
+import UsernameLink from "@/components/UsernameLink";
 import useTimeDistance from "@/hooks/useTimeDistance";
 import { CommentDataType } from "@/lib/types";
 import { CommentEditor } from "@/modules/pin/components/Comment/CommentInput";
@@ -20,19 +21,23 @@ export default function CommentLayout({
   const distanceToNow = useTimeDistance({ dateString: commentData.created_at });
   return (
     <div className="flex w-full gap-4">
-      <UserAvatar
-        userAvatarUrl={commentData.user.avatar}
-        username={commentData.user.username}
-      />
+      <UsernameLink userData={commentData.user}>
+        <UserAvatar
+          userAvatarUrl={commentData.user.avatar}
+          username={commentData.user.username}
+        />
+      </UsernameLink>
       <div className="space-y-2 overflow-hidden">
         <div className="flex items-center gap-x-2">
           {/* Comment Content */}
-          <div className="p-3 text-black bg-gray-100 rounded-md">
-            <h3 className="text-sm font-medium">
-              {commentData.user.full_name}
-            </h3>
+          <div className="rounded-md bg-gray-100 p-3 text-black">
+            <UsernameLink userData={commentData.user}>
+              <h3 className="text-sm font-medium">
+                {commentData.user.full_name}
+              </h3>
+            </UsernameLink>
             <article
-              className="break-words whitespace-pre-line"
+              className="whitespace-pre-line break-words"
               dangerouslySetInnerHTML={{
                 __html: xss(commentData.content),
               }}

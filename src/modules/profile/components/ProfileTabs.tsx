@@ -1,13 +1,22 @@
 import { Pins } from "@/components/Pin";
-import { ApiResponsePaginationWrapper, PinDataType } from "@/lib/types";
+import {
+  ApiResponsePaginationWrapper,
+  PinDataType,
+  UserDataType,
+} from "@/lib/types";
+import { useAppSelector } from "@/redux/hooks";
+import { selectAuth } from "@/redux/slices/authSlice";
 import { Tab, Tabs } from "@nextui-org/tabs";
-import { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  UseInfiniteQueryResult,
+  UseQueryResult,
+} from "@tanstack/react-query";
+import { Fragment } from "react/jsx-runtime";
 
-export default function ProfileTabs({
-  savedPinsQuery,
-  createdPinsQuery,
-}: {
-  savedPinsQuery: UseInfiniteQueryResult<
+interface IProps {
+  profileQuery: UseQueryResult<UserDataType, Error>;
+  savedPinsQuery?: UseInfiniteQueryResult<
     InfiniteData<ApiResponsePaginationWrapper<PinDataType[]>["data"], unknown>,
     Error
   >;
@@ -16,25 +25,48 @@ export default function ProfileTabs({
     Error
   >;
   //   createdPins: any[];
-}) {
+}
+
+export default function ProfileTabs({
+  profileQuery,
+  savedPinsQuery,
+  createdPinsQuery,
+}: IProps) {
+  const { user } = useAppSelector(selectAuth);
+
   const tabs = [
     {
       id: "pin-created",
       label: "Đã tạo",
-      content: () => <Pins infinitePinsData={savedPinsQuery} />,
+      content: <Pins infinitePinsData={createdPinsQuery} />,
     },
     {
       id: "pin-saved",
       label: "Đã lưu",
-      content: () => <Pins infinitePinsData={createdPinsQuery} />,
+      content: (
+        <>{savedPinsQuery && <Pins infinitePinsData={savedPinsQuery} />}</>
+      ),
+      meOnly: true,
     },
   ];
+
+  const { data: userData } = profileQuery;
+
   return (
-    <Tabs variant="underlined" items={tabs}>
+    <Tabs
+      variant="underlined"
+      items={tabs}
+      className="!mt-0"
+      classNames={{
+        cursor: "!bg-primary",
+      }}
+    >
       {tabs.map((tab) => (
-        <Tab key={tab.id} title={tab.label}>
-          {tab.content()}
-        </Tab>
+        <Fragment key={tab.id}>
+          {(!tab.meOnly || user?.id == (userData?.id || -1)) && (
+            <Tab title={tab.label}>{tab.content}</Tab>
+          )}
+        </Fragment>
       ))}
     </Tabs>
   );
