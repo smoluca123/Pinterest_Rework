@@ -1,8 +1,12 @@
 import { getCommentsAPI, getPinDetailAPI } from '@/apis/mediaApis';
 import { DEFAULT_GC_TIME, DEFAULT_STALE_TIME } from '@/lib/constant';
+import { ApiResponsePaginationWrapper, CommentDataType } from '@/lib/types';
 import {
+  InfiniteData,
+  QueryKey,
   queryOptions,
   useInfiniteQuery,
+  UseInfiniteQueryOptions,
   useQuery,
   UseQueryOptions,
 } from '@tanstack/react-query';
@@ -30,7 +34,28 @@ export default function useQueryPinDetail({ pinId }: { pinId: number }) {
   return query;
 }
 
-export function useQueryComments({ pinId }: { pinId: number }) {
+export function useQueryComments(
+  {
+    pinId,
+    replyTo,
+  }: {
+    pinId: number;
+    replyTo?: number | null;
+  },
+  options?: Omit<
+    UseInfiniteQueryOptions<
+      ApiResponsePaginationWrapper<CommentDataType[]>, // Type của response data
+      unknown, // Type của error
+      InfiniteData<ApiResponsePaginationWrapper<CommentDataType[]>>, // Type của normalized data
+      ApiResponsePaginationWrapper<CommentDataType[]>, // Type của raw data
+      QueryKey,
+      number // Type của pageParam
+    >,
+    'queryKey' | 'queryFn' | 'getNextPageParam' | 'initialPageParam'
+  > & {
+    queryKey?: QueryKey;
+  }
+) {
   const getComments = async ({
     limit,
     page,
@@ -39,7 +64,7 @@ export function useQueryComments({ pinId }: { pinId: number }) {
     page?: number;
   }) => {
     try {
-      const data = await getCommentsAPI({ pinId, limit, page });
+      const data = await getCommentsAPI({ pinId, limit, page, replyTo });
       return data;
     } catch (error) {
       console.log(error);
@@ -61,7 +86,9 @@ export function useQueryComments({ pinId }: { pinId: number }) {
         : undefined;
     },
     initialPageParam: 1,
-    refetchInterval: 60 * 2000, // 1 minute
+    refetchInterval: 60 * 2000, // 2 minute
+    staleTime: 60 * 2000,
+    ...options,
   });
   return query;
 }

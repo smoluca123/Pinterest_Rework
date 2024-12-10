@@ -48,6 +48,32 @@ export default function AuthDialog() {
         {isSignUp && <SignUpForm />}
         {isVerifyEmail && <VerifyEmailForm />}
 
+        {isSignIn && (
+          <p
+            className="mx-auto font-medium cursor-pointer hover:underline w-fit"
+            onClick={() => {
+              dispatch(
+                setAuthDialogOpen({ isOpen: true, dialogType: 'signup' })
+              );
+            }}
+          >
+            Chưa tham gia Pinterest? Đăng ký
+          </p>
+        )}
+
+        {isSignUp && (
+          <p
+            className="mx-auto font-medium cursor-pointer hover:underline w-fit"
+            onClick={() => {
+              dispatch(
+                setAuthDialogOpen({ isOpen: true, dialogType: 'signin' })
+              );
+            }}
+          >
+            Đã tham gia Pinterest? Đăng nhập
+          </p>
+        )}
+
         <DialogFooter>
           <DialogClose asChild>
             <Button>Close</Button>

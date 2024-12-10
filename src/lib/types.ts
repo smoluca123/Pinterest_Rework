@@ -70,8 +70,14 @@ export interface CommentDataType {
   created_at: string;
   updated_at: string;
   level: number;
-  reply_to: null;
+  reply_to: number | null;
   media_id: number;
   replies: number;
   user: UserDataType;
+}
+
+export interface SavedPinDataType {
+  id: number;
+  created_at: string;
+  media: PinDataType;
 }

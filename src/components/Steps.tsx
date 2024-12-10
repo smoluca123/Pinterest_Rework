@@ -11,7 +11,7 @@ export default function Steps({ steps, activeStep = 1 }: IProps) {
   const activeClasses =
     'before:!bg-primary after:!bg-primary after:!text-white';
   return (
-    <ul className="steps">
+    <ul className="w-full steps">
       {steps.map((step, i) => {
         return (
           <li

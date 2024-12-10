@@ -1,8 +1,9 @@
-import InfiniteScrollContainer from '@/components/InfiniteScrollContainer';
-import PinSkeleton, { randomHeight } from '@/components/PinSkeleton';
-import PinItem from '@/modules/home/components/Pin/PinItem';
-import { useQueryPins } from '@/modules/home/components/Pin/querys';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
+import PinSkeleton, { randomHeight } from "@/components/PinSkeleton";
+import { ApiResponsePaginationWrapper, PinDataType } from "@/lib/types";
+import PinItem from "./PinItem";
+import { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 // import Masonry from '@/components/Masonry';
 
 const itemsLenght = 10;
@@ -10,9 +11,15 @@ const itemsLenght = 10;
 const emptyArrayItemLenghts = Array.from({ length: itemsLenght });
 
 // const randomHeightsSkeleton = emptyArrayItemLenghts.map(() => randomHeight());
-export default function Pins() {
-  const { data, isFetching, fetchNextPage, hasNextPage } = useQueryPins();
-
+export default function Pins({
+  infinitePinsData,
+}: {
+  infinitePinsData: UseInfiniteQueryResult<
+    InfiniteData<ApiResponsePaginationWrapper<PinDataType[]>["data"], unknown>,
+    Error
+  >;
+}) {
+  const { data, isFetching, fetchNextPage, hasNextPage } = infinitePinsData;
   return (
     <InfiniteScrollContainer
       isShowInViewElement={hasNextPage}
@@ -23,7 +30,7 @@ export default function Pins() {
           {/* Render data */}
           {data &&
             data.pages.map((page) =>
-              page.items.map((pin) => <PinItem key={pin.id} pinData={pin} />)
+              page.items.map((pin) => <PinItem key={pin.id} pinData={pin} />),
             )}
 
           {/* Loading */}
@@ -38,7 +45,7 @@ export default function Pins() {
       </ResponsiveMasonry>
 
       {!hasNextPage && (
-        <p className="my-10 font-normal text-center text-muted-foreground ">
+        <p className="my-10 font-normal text-center text-muted-foreground">
           No more pins to load!
         </p>
       )}

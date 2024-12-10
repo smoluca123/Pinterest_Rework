@@ -1,7 +1,7 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { DEFAULT_USER_AVATAR_URL } from '@/lib/constant';
-import { PropsWithClassName } from '@/lib/types';
-import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DEFAULT_USER_AVATAR_URL } from "@/lib/constant";
+import { PropsWithClassName } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 interface IProps extends PropsWithClassName {
   username: string;
@@ -14,7 +14,7 @@ export default function UserAvatar({
   className,
 }: IProps) {
   return (
-    <Avatar className={cn('', className)}>
+    <Avatar className={cn("", className)}>
       <AvatarFallback>{username}</AvatarFallback>
       <AvatarImage src={userAvatarUrl || DEFAULT_USER_AVATAR_URL} />
     </Avatar>

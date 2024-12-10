@@ -1,5 +1,6 @@
 import { nextui } from '@nextui-org/theme';
 import daisyui from 'daisyui';
+import tailwindTypography from '@tailwindcss/typography';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -76,5 +77,10 @@ export default {
   daisyui: {
     themes: [],
   },
-  plugins: [require('tailwindcss-animate'), nextui(), daisyui],
+  plugins: [
+    require('tailwindcss-animate'),
+    nextui(),
+    daisyui,
+    tailwindTypography(),
+  ],
 };

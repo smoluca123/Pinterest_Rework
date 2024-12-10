@@ -7,11 +7,17 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-export function usePostCommentMutation({ pinId }: { pinId: number }) {
+export function usePostCommentMutation({
+  pinId,
+  replyTo,
+}: {
+  pinId: number;
+  replyTo?: number | null;
+}) {
   const queryClient = useQueryClient();
   const postComment = async ({ content }: { content: string }) => {
     try {
-      const data = await postCommentAPI({ pinId, content });
+      const data = await postCommentAPI({ pinId, content, replyTo });
       return data;
     } catch (error) {
       console.log(error);
@@ -28,20 +34,71 @@ export function usePostCommentMutation({ pinId }: { pinId: number }) {
     ],
     mutationFn: postComment,
     onSuccess: async (newComment) => {
-      const queryFilter: QueryFilters = {
-        queryKey: [
-          'comments',
-          {
-            id: pinId,
-          },
-        ],
-      };
-      //   Cancel previous queries related to the pinId
+      let queryFilter: QueryFilters = {};
+
+      if (newComment.data.reply_to) {
+        queryFilter = {
+          queryKey: [
+            'reply-comments',
+            {
+              id: newComment.data.media_id,
+              replyTo: newComment.data.reply_to,
+            },
+          ],
+        };
+
+        //* Increment the replies count for the parent comment
+
+        const parentQueryFilters: QueryFilters = {
+          queryKey: [
+            'comments',
+            {
+              id: pinId,
+            },
+          ],
+        };
+        queryClient.setQueriesData<
+          InfiniteData<ApiResponsePaginationWrapper<CommentDataType[]>>
+        >(parentQueryFilters, (oldData) => {
+          if (!oldData) return;
+
+          const updatedPages = oldData.pages.map((page) => ({
+            ...page,
+            data: {
+              ...page.data,
+              items: page.data.items.map((comment) =>
+                comment.id === newComment.data.reply_to
+                  ? { ...comment, replies: comment.replies + 1 }
+                  : comment
+              ),
+            },
+          }));
+
+          return {
+            pageParams: oldData.pageParams,
+            pages: updatedPages,
+          };
+        });
+      } else {
+        queryFilter = {
+          queryKey: [
+            'comments',
+            {
+              id: pinId,
+            },
+          ],
+        };
+      }
+
+      //*   Cancel previous queries related to the pinId
       await queryClient.cancelQueries(queryFilter);
 
+      //* Add the new comment to the list of comments
       queryClient.setQueriesData<
         InfiniteData<ApiResponsePaginationWrapper<CommentDataType[]>>
       >(queryFilter, (oldData) => {
+        if (!oldData) return;
+
         const pageSize = (oldData && oldData.pages.length - 1) || 0;
         const lastPage = oldData?.pages[pageSize];
         if (lastPage) {

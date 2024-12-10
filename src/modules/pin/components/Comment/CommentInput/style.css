@@ -9,3 +9,7 @@
 .tiptap.ProseMirror {
   outline: none;
 }
+
+/* .tiptap p.is-editor-empty:first-child::before {
+  @apply text-muted-foreground
+} */
