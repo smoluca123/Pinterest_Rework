@@ -9,6 +9,7 @@ import {
 } from "@/lib/types";
 import ProfileSkeleton from "@/modules/profile/components/ProfileSkeleton";
 import ProfileTabs from "@/modules/profile/components/ProfileTabs";
+import UpdateAvatarDialog from "@/modules/profile/components/UpdateProfile/UpdateAvatarDialog";
 import UpdateProfileDialog from "@/modules/profile/components/UpdateProfile/UpdateProfileDialog";
 import { useAppSelector } from "@/redux/hooks";
 import { selectAuth } from "@/redux/slices/authSlice";
@@ -17,6 +18,7 @@ import {
   UseInfiniteQueryResult,
   UseQueryResult,
 } from "@tanstack/react-query";
+import { Edit } from "lucide-react";
 import { memo, useState } from "react";
 
 interface IProps {
@@ -40,6 +42,8 @@ export default memo(function ProfileLayout({
   const { data: userData, isFetching } = profileQuery;
   const [showUpdateProfileDialog, setShowUpdateProfileDialog] =
     useState<boolean>(false);
+  const [showUpdateAvatarDialog, setShowUpdateAvatarDialog] =
+    useState<boolean>(false);
 
   return (
     <>
@@ -49,12 +53,22 @@ export default memo(function ProfileLayout({
       <div className="py-4">
         {userData && (
           <>
-            <div className="mx-auto w-fit rounded-full shadow-lg">
+            <div className="relative mx-auto overflow-hidden rounded-full shadow-lg group/avatar w-fit">
               <UserAvatar
                 userAvatarUrl={userData.avatar}
                 username={userData.username}
                 className="mx-auto size-40"
               />
+
+              {/* Overlay */}
+              <div className="absolute top-0 left-0 transition-opacity opacity-0 size-full bg-black/20 group-hover/avatar:opacity-100"></div>
+
+              <button
+                className="absolute p-2 transition-opacity -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 left-1/2 top-1/2 bg-black/40 group-hover/avatar:opacity-100"
+                onClick={() => setShowUpdateAvatarDialog(true)}
+              >
+                <Edit className="text-white" />
+              </button>
             </div>
 
             <div className="space-y-2 text-center">
@@ -80,11 +94,18 @@ export default memo(function ProfileLayout({
               <Separator className="!my-4" />
             </div>
 
-            {/* Dialog */}
+            {/* Dialog update profile */}
             <UpdateProfileDialog
               userData={userData}
               open={showUpdateProfileDialog}
               onClose={() => setShowUpdateProfileDialog(false)}
+            />
+
+            {/* Dialog update profile */}
+            <UpdateAvatarDialog
+              onClose={() => setShowUpdateAvatarDialog(false)}
+              open={showUpdateAvatarDialog}
+              userData={userData}
             />
           </>
         )}
