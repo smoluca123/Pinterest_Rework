@@ -116,9 +116,37 @@ export const updateProfileAPI = async ({
   newData: ProfileUpdateValues;
 }) => {
   try {
-    const { data } = await baseApi.put<
+    const { data } = await baseApi.patch<
       ApiResponseWrapper<UserDataWithTokenType>
     >("/user/update-info", newData);
+    return data;
+  } catch (error: any) {
+    if (error.response) {
+      throw error.response.data.message;
+    }
+    throw error.message;
+  }
+};
+
+export const updateAvatarAPI = async ({
+  avatarFile,
+  userId,
+}: {
+  userId: number;
+  avatarFile: File;
+}) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", avatarFile);
+    const { data } = await baseApi.post<ApiResponseWrapper<UserDataType>>(
+      "/user/update-user-avatar/" + userId,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
     return data;
   } catch (error: any) {
     if (error.response) {

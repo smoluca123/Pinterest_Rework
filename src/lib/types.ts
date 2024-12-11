@@ -81,3 +81,10 @@ export interface SavedPinDataType {
   created_at: string;
   media: PinDataType;
 }
+
+export type coppedAreaType = {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+};

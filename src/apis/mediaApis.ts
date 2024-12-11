@@ -101,7 +101,7 @@ export const updateCommentAPI = async ({
   content: string;
 }) => {
   try {
-    const { data } = await baseApi.put<ApiResponseWrapper<CommentDataType>>(
+    const { data } = await baseApi.patch<ApiResponseWrapper<CommentDataType>>(
       "/media/update-comment/" + commentId,
       {
         content,
@@ -273,7 +273,7 @@ export const pinUpdateAPI = async ({
   payload: PinUpdateValues;
 }) => {
   try {
-    const { data } = await baseApi.put<ApiResponseWrapper<PinDataType>>(
+    const { data } = await baseApi.patch<ApiResponseWrapper<PinDataType>>(
       "/media/update-media/" + pinId,
       payload,
     );
