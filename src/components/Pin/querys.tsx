@@ -2,19 +2,33 @@ import { getPinsAPI } from "@/apis/mediaApis";
 import { DEFAULT_STALE_TIME } from "@/lib/constant";
 import { FetchQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
 
-export const getPins = async ({ page = 1 }: { page?: number }) => {
+export const getPins = async ({
+  keyword,
+  page = 1,
+  limit = 10,
+}: {
+  keyword?: string;
+  page?: number;
+  limit?: number;
+}) => {
   try {
-    const data = await getPinsAPI({ page });
+    const data = await getPinsAPI({ page, limit, keyword });
     return data.data;
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
-export function useQueryPins() {
+export function useQueryPins({ keyword = "" }: { keyword?: string }) {
   const query = useInfiniteQuery({
-    queryKey: ["pins", "for-you"],
-    queryFn: ({ pageParam }) => getPins({ page: pageParam }),
+    queryKey: [
+      "pins",
+      "for-you",
+      {
+        keyword,
+      },
+    ],
+    queryFn: ({ pageParam }) => getPins({ page: pageParam, keyword }),
     getNextPageParam: ({ currentPage, totalPage }) => {
       return currentPage < totalPage ? currentPage + 1 : undefined;
     },
