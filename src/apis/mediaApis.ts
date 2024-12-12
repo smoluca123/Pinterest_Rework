@@ -9,9 +9,11 @@ import {
 import { PinCreateValues, PinUpdateValues } from "@/lib/validations";
 
 export const getPinsAPI = async ({
+  keyword = "",
   page = 1,
   limit = 10,
 }: {
+  keyword?: string;
   page?: number;
   limit?: number;
 }) => {
@@ -21,6 +23,7 @@ export const getPinsAPI = async ({
         method: "GET",
         url: "/media/get-media-list",
         params: {
+          keyword,
           page,
           limit,
         },
