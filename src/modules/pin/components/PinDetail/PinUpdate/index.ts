@@ -1,3 +1,3 @@
-import UpdatePinDialog from "@/modules/pin/components/PinDetail/PinUpdate/UpdatePindialog";
+import UpdatePinDialog from "@/modules/pin/components/PinDetail/PinUpdate/UpdatePinDialog";
 
 export { UpdatePinDialog };
